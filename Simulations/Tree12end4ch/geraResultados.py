@@ -4,11 +4,20 @@ from datetime import datetime
 
 
 #protocolos = ["csmaca","chdsmeack","cadsmeack","hdsmeack","tsch","abmpstar"]
-protocolos = ["abmptree","tschtree"]
+#protocolos = ["abmptree","tschtree"]
 
 num_nodes = int(sys.argv[1])
 
 num_rep = int(sys.argv[2])
+
+protocolos = sys.argv[3:]
+
+print "-----------------------------------------------------"
+print "arquivo: geraResultados.py:"
+print "Numero de nos: " + str(num_nodes)
+print "Numero de rep: " + str(num_rep)
+print "Protocolos: "+ str(protocolos)
+print "-----------------------------------------------------"
 
 #initial_node = int(sys.argv[3])
 

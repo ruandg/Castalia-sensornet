@@ -8,6 +8,13 @@ pasta = sys.argv[1]
 filename = sys.argv[2]
 number_nodes = int(sys.argv[3])
 
+print "-----------------------------------------------------"
+print "arquivo: getTUDOTODOS.py:"
+print "Pasta: " + pasta
+print "Filename: " + filename
+print "Numero de nos: "+ str(number_nodes)
+print "-----------------------------------------------------"
+
 number_ch = 4
 
 WINDOW = 10
