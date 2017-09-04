@@ -35,3 +35,18 @@ for protocolo in protocolos:
 comando = "python geraResultados.py "+str(num_nodes)+" "+str(num_rep)+p
 print "Executando o comando: " + comando 
 os.system(comando)
+
+'''
+em runSimulation.py
+* apos python runsimulationpy 48 1 abmptree
+o castalia (simulador) eh chamdo e gera o 
+analisar.txt e o castalia-trace.txt que eh 
+renomeado para protocolo_num_nodes_num_reps.txt
+* em seguida o script geraResultados.py eh chamado
+    em geraResultados.py:
+    * eh chamado getTUDOTODOS.py
+    * eh criada uma nova pasta de resultados onde
+    todos os scripts de calculo sao copiados
+        em getTUDOTODOS.py:
+
+'''
