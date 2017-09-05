@@ -19,7 +19,11 @@ except EOFError as e:
     if qtd == 1:
         saida = str(media) + "\t" + "0"
     else:
-        media = media/qtd
+        #problema qtd pode ser = 0
+        if qtd != 0:
+            media = media/qtd
+        else:
+            media = 0
         desvio = 0.0
         for i in range(0,qtd):
             desvio = desvio + pow((valores[i] - media),2)

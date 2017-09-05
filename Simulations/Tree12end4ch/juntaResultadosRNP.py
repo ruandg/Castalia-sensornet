@@ -4,7 +4,7 @@ import sys
 num_nodes = int(sys.argv[1])
 
 #protocolos = ["csmaca","chdsmeack","cadsmeack","hdsmeack","tsch","abmpstar"]
-protocolos = ["abmptree","tschtree"]
+protocolos = sys.argv[3:]
 
 media_nodes = []
 var_nodes = []

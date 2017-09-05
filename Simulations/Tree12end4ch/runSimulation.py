@@ -23,7 +23,11 @@ for protocolo in protocolos:
     for j in range(1, num_rep+1):
         print "Replicacao ",j
         #prr app
+
+        #if protocolo == "abmptree2":
+            #roda script para alterar omnetpp.ini
         comando = "../../bin/Castalia -c General,amb3,debugALL,top"+str(j)+","+protocolo+" -i omnetpp.ini -o analisar.txt"
+
         print comando 
         os.system(comando)
         #renomeando
@@ -42,11 +46,14 @@ em runSimulation.py
 o castalia (simulador) eh chamdo e gera o 
 analisar.txt e o castalia-trace.txt que eh 
 renomeado para protocolo_num_nodes_num_reps.txt
+* o castalia utiliza o arquivo de inicializacao
+omnetpp.ini
 * em seguida o script geraResultados.py eh chamado
     em geraResultados.py:
     * eh chamado getTUDOTODOS.py
     * eh criada uma nova pasta de resultados onde
-    todos os scripts de calculo sao copiados
-        em getTUDOTODOS.py:
+    todos os scripts de calculo sao copiados em getTUDOTODOS.py
 
+* depois executar na pasta geraMedia todos 48 0 protocolos
+* os arquivos junta* tambem foram automatizados
 '''

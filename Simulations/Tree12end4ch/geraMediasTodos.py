@@ -4,11 +4,14 @@ import sys
 import os
 
 #protocolos = ["csmaca","chdsmeack","cadsmeack","hdsmeack","tsch","abmpstar"]
-protocolos = ["tschtree","abmptree"]
+#protocolos = ["tschtree","abmptree"]
 
 num_nodes = int(sys.argv[1])
 
 #(num_ch+1) = int(sys.argv[2])
+
+protocolos = sys.argv[3:]
+
 num_ch = 4
 
 for protocolo in protocolos:
@@ -86,20 +89,22 @@ for protocolo in protocolos:
     comando = "python mediaTempo.py "+protocolo+" "+str(num_nodes)+ " "+str((num_ch+1))+ " > MediaTempo_"+protocolo+".txt" 
     os.system(comando)
 
-comando = "python juntaResultadosPRRAPP.py "+str(num_nodes)+" > Resultados_PRRAPP.txt"
-os.system(comando)
 
-comando = "python juntaResultadosPRRMAC.py "+str(num_nodes+num_ch)+" > Resultados_PRRMAC.txt"
-os.system(comando)
+for protocolo in protocolos:
+    comando = "python juntaResultadosPRRAPP.py "+str(num_nodes)+" 0 " + str(protocolo) + " > Resultados_PRRAPP.txt"
+    os.system(comando)
 
-comando = "python juntaResultadosRNP.py "+str(num_nodes+num_ch)+" > Resultados_RNP.txt"
-os.system(comando)
+    comando = "python juntaResultadosPRRMAC.py "+str(num_nodes+num_ch)+" 0 " + str(protocolo) + " > Resultados_PRRMAC.txt"
+    os.system(comando)
 
-comando = "python juntaResultadosTX.py "+str(num_nodes)+" > Resultados_TX.txt"
-os.system(comando)
+    comando = "python juntaResultadosRNP.py "+str(num_nodes+num_ch)+" 0 " + str(protocolo) + " > Resultados_RNP.txt"
+    os.system(comando)
 
-comando = "python juntaResultadosRX.py "+str(num_nodes)+" > Resultados_RX.txt"
-os.system(comando)
+    comando = "python juntaResultadosTX.py "+str(num_nodes)+" 0 " + str(protocolo) + " > Resultados_TX.txt"
+    os.system(comando)
+
+    comando = "python juntaResultadosRX.py "+str(num_nodes)+" 0 " + str(protocolo) + " > Resultados_RX.txt"
+    os.system(comando)
         #prr_power
         #comando = "python getTempoDesconectado.py "+str(i)+ " < Castalia-Trace_"protocolo+"_"+str(num_nodes)+"_"+str(j)+".txt" >> "TEMPO_"+protocolo+"_node"+str(i)+".txt" 
         #comando = "python getPRRandPOWER.py "+str(i)+ " < Castalia-Trace.txt > resultadosREP"+str(replicacao)+"/PRRandPOWER_Node"+str(i)+"_rep"+str(replicacao)+"_CD"+str(ch_div)+".txt" 
