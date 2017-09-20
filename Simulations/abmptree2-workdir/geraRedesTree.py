@@ -227,6 +227,8 @@ print saida_abmp
 
 ############### algoritmo novo
 
+print (number_endnodes)
+
 def EuclidDist(x1, y1, x2, y2):
     return m.sqrt(m.pow(x1-x2,2)+m.pow(y1-y2,2))
 
@@ -323,9 +325,15 @@ for i in range(0, number_ch):
             channelsCheckCount += 1
     print "Cluster head " + str(i) + "(" + str(channelsCheckCount) + ")"
     print "channels -> ",
+    MAC_CHANNELLS = ""
     for j in range(0, NUM_OF_CHANNELS):
         if channels[i][j] == True:
             print str(j),
+            MAC_CHANNELLS += "1"
+        else:
+            MAC_CHANNELLS += "0"
+    print MAC_CHANNELLS
+
     print
     print
 
