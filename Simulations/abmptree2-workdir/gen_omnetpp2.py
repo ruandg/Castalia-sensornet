@@ -7,6 +7,7 @@ import sys
 import os
 import Queue as Q
 import ctypes
+import math
 
 #consegue a coordenada do no a partir do arquivo
 def getValueCoord(txt, it):
@@ -24,6 +25,14 @@ def changeMacChannel(txt, it, MAC, nc):
 	for i in range (0, nc):
 		mutable[it+i] = MAC[i]
 	return mutable.value, it+i
+
+#verifica a distancia
+def dist(x1, y1, x2, y2):
+    return math.sqrt((x1-x2)**2 + (y1-y2)**2)
+
+#verifica se ha interferencia
+def interf(ple, d0, pld0, sigma, pt, sen_tr, d):         #prob 95.44
+    return pt - (pld0 + 10*ple*math.log10(d/d0) - 2*sigma) >= -94
 
 #ler a topologia
 if len(sys.argv) != 2:
@@ -61,12 +70,39 @@ while cont < numNodes:
 # conseguir valore uteis em omnetpp.ini
 NUM_OF_CHANNELS = 16
 number_ch = 4
+    #poreqnuanto estou setando os valores
+ple = 2.4 #expoente de perda
+pld0 = 80.48 #perda na distancia de referencia
+d0 = 15 #distancia de referencia
+sigma = 6.62 #desvio padrao em dB a ser aplicado
+pt = 0 #potencia de transmissao
+sen_tr = -94 #sensibilidade do transceptor
+
+#pela equacao Pr(d) = Pt - L(d) = - L(d)
+#a prob de o valor ficar entre [-2sig, 2sig] eh 95.44
+#aa prob da potencia de recepcao ficar entre -(L(d)+2sig) e -(L(d)-2sig) eh 95.44
+#entao se a sensibilidade do transceptor eh -94dBm
+#as transmissoes de A nao sao percebidas por B se 
+# L(d0) + 10nlog(d/d0) +13,24 < -94 : pois esse eh o maior valor possivel
+
+# ou seja se L(d0) + 10nlog(d/d0) +13,24 > 94 entao ha interferencia
 
 # criando o grafo
 G = [[0 for u in range(0, number_ch)] for v in range(0, number_ch)]
-#necessario definir grafo aqui
 
+#no0 -> sinknode
+#no1 -> [5,16] no2 -> [17,28] no3 -> [29, 40] no4 -> [41, 52]
  
+for i in range (1, number_ch + 1): #roteadores
+    for j in range (1, number_ch + 1): #roteadores2
+        if i == j:
+            continue
+        for k in range (j*12-7, j*12+5):
+            if interf(ple, d0, pld0, sigma, pt, sen_tr, 
+            dist(node_position_x[i], node_position_y[i],
+                 node_position_x[k], node_position_y[k])):
+                 G[i-1][j-1] = G[j-1][i-1] = 1 #bidirecional
+        
 # alocando canais de forma inteligente
 degrees = [0 for i in range(0, number_ch)]
 used = [0 for i in range(0, number_ch)]
