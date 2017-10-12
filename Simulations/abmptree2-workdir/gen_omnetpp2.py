@@ -32,7 +32,7 @@ def dist(x1, y1, x2, y2):
 
 #verifica se ha interferencia
 def interf(ple, d0, pld0, sigma, pt, sen_tr, d):         #prob 95.44
-    return pt - (pld0 + 10*ple*math.log10(d/d0) - 2*sigma) >= -94
+    return pt - (pld0 + 10*ple*math.log10(d/d0) - sigma/2) >= sen_tr
 
 #ler a topologia
 if len(sys.argv) != 2:
