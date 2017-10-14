@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib.patches as patches
 import sys
 import math
+import smallestEnclosingCircle
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 #########################################################
@@ -52,7 +53,11 @@ def dist(x1, y1, x2, y2):
     return math.sqrt((x1-x2)**2 + (y1-y2)**2)
 
 def interf(ple, d0, pld0, sigma, pt, sen_tr, d):         #prob 95.44
-    return pt - (pld0 + 10*ple*math.log10(d/d0) - sigma/2) >= sen_tr
+    return pt - (pld0 + 10*ple*math.log10(d/d0) + sigma) >= sen_tr
+
+def router_reach(ple, d0, pld0, sigma, pt, sen_tr):         #prob 95.44
+    return 10**( (sen_tr - pt + sigma + pld0)/(-10*ple) + math.log10(d0) )
+
 
 ##########################################################
 
@@ -81,16 +86,26 @@ for i in range(1, 5):
 			else:
 				plt.plot([npx[i], npx[j]], [npy[i], npy[j]], 'r--', c="#000000", alpha = 0.1, label="interference" if fl2 == 0 else ""); fl2 = 1
 
-
-circle1=patches.Circle((0,0),40, color='r', alpha=0.5)
+#sec to get position of sink node
+sn_pos = smallestEnclosingCircle.make_circle(zip(npx[5:], npy[5:]))
+circle1=patches.Circle((sn_pos[0],sn_pos[1]),sn_pos[2], color='g', alpha=0.5)
 plt.gcf().gca().add_artist(circle1)
 
+
+#area of router nodes
+radius = router_reach(ple, d0, pld0, sigma, pt, sen_tr)
+for i in range(1, 5):
+    circle1=patches.Circle((npx[i],npy[i]), radius, color='r', alpha=0.5)
+    plt.gcf().gca().add_artist(circle1)
+
+#ploting points
 plt.plot(npx[5:], npy[5:], 'ro', ms='8', c="#000000", alpha = 0.8, marker='1', label="sensor node")
 plt.plot(npx[1:5], npy[1:5], 'ro', ms='12', c="#000000", alpha = 0.8, marker='H', label="router node")
 plt.plot(npx[0], npy[0], 'ro', ms='12', c="#000000", alpha = 0.8, marker='$SN$', label="sink node")
+
+#grid format
 plt.xlabel("position x axis")
 plt.ylabel("position y axis")
-
 plt.legend(loc = 3)
 plt.minorticks_on()
 plt.xticks(np.arange(-100, 101, 20.0))
