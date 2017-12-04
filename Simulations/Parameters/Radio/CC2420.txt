@@ -17,8 +17,8 @@ normal, 250, PSK, 4, 20, 194, -100, -94, 62
 IDEAL, 250, IDEAL, 4, 20, 194, -100, -94, 62
 
 TX LEVELS
-Tx_dBm 0 -1 -3 -5 -7 -10 -15 -25
-Tx_mW 57.42 55.18 50.69 46.2 42.24 36.3 32.67 29.04
+Tx_dBm 15 10 5 0 -1 -3 -5 -7 -10 -15 -25
+Tx_mW 57.42 57.42 57.42 57.42 55.18 50.69 46.2 42.24 36.3 32.67 29.04
 
 DELAY TRANSITION MATRIX
 # State switching times (time to switch from column state to row state, in msec)
