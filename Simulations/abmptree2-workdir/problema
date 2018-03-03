@@ -1,0 +1,36 @@
+Dada a configuração de N nós finais (Xi, Yi, Zi) e a quantidade de canais disponíveis
+Encontrar a melhor alocação possível (que maximize o uso da rede) alterando as seguintes variáveis:
+
+ 1 - Posição do Sink Node
+ 2 - Potência(para + ou -) do Sink Node 
+ 3 - Posição dos roteadores
+ 4 - Potência(para + ou -) dos roteadores
+ 5 - Potência(para -) dos nós finais 
+ 6 - Ligação [nó final - (roteador or sink node)]
+ 7 - Canais de comunicação atribuidos a cada roteador
+
+Solução 1 (4 routers):
+
+    Para 4 roteadores
+
+    para 1: SEC com todos os nós
+    para 2: Potência Máxima possível para o sink Node compatível com o mercado (15 dBm)
+    para 3: Similar a rede de telefonia móvel em formato quadrado com shape circular
+            fator aleatório (-2sigma) para cálculo de distância do sink node (0.5% pra dentro)
+    para 4: Potência Máxima possível para os router nodes compatível com o mercado (15 dBm)
+        * partindo do princípio que a colisão só ocorre no receptor aumentar a Potência
+          dos routers não vai interferir nos nós finais
+        * porém como o cálculo da potência influencia no cálculo da distância devemos ter cuidado
+          para não nos afastar dos nós finais
+    para 5: min(0 dbm, 0.95* (Potência mínima possível para alcançar com (-2sigma) o router mais próximo))
+    para 6: algoritmo guloso
+    para 7: algoritmo de alocação de canais
+
+Solução 2 (3 routers)
+
+    mesmos passos acima porém no passo 3 o formato será triangular com shape hexagonal
+
+* alterar Posição (topologia, nó, x, y, z) [xCoor, yCoor, zCoor]
+* alterar potência (topologia, nó, valor_de_potencia) [SN.node[*].Communication.Radio.TxOutputPower = "0dBm"]
+* alterar o nó pai (topologia, nó, nó_pai) [Communication.MAC.clusterID]
+* alterar canal de comunicação (topologia, nó, canais_de_comunicação) [Communication.MAC.channels]

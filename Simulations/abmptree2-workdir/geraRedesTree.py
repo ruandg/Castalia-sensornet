@@ -92,57 +92,57 @@ for i in range(1,number_ch+1):
     dist = m.sqrt(m.pow(xCoor-x_base,2)+m.pow(yCoor-y_base,2)) #distancia euclidiana
     distancias = distancias + "# "+ str(dist)+"\n"
 
-    #saida_positions = saida_positions + "SN.node["+str(i)+"].xCoor = "+str(xCoor)+"\n"
-    #saida_positions = saida_positions + "SN.node["+str(i)+"].yCoor = "+str(yCoor)+"\n"
-    #saida_positions = saida_positions + "SN.node["+str(i)+"].zCoor = 2"+"\n"
-    #saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.isClusterHead = true\n"
-    #saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.clusterID = 0\n"
-    #saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.macBufferSize = "+str(buffersize_ch)+"\n"
+    saida_positions = saida_positions + "SN.node["+str(i)+"].xCoor = "+str(xCoor)+"\n"
+    saida_positions = saida_positions + "SN.node["+str(i)+"].yCoor = "+str(yCoor)+"\n"
+    saida_positions = saida_positions + "SN.node["+str(i)+"].zCoor = 2"+"\n"
+    saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.isClusterHead = true\n"
+    saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.clusterID = 0\n"
+    saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.macBufferSize = "+str(buffersize_ch)+"\n"
     nodes_positions_x.append(xCoor);
     nodes_positions_y.append(yCoor);
-    #saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.allocatedSlots = \"01"
-    #for k in range(0,number_endnodes):
-    #    saida_abmp = saida_abmp + "0"
+    saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.allocatedSlots = \"01"
+    for k in range(0,number_endnodes):
+        saida_abmp = saida_abmp + "0"
 
     qtd_ant = i-1
     qtd_dep = number_ch-i
 
-    #for n in range (0,number_txch):
-    #   for k in range(0,qtd_ant):
-    #       saida_abmp = saida_abmp + "0"
-    #   saida_abmp = saida_abmp + "1"
-    #   for k in range(0,qtd_dep):
-    #       saida_abmp = saida_abmp + "0"
+    for n in range (0,number_txch):
+       for k in range(0,qtd_ant):
+           saida_abmp = saida_abmp + "0"
+       saida_abmp = saida_abmp + "1"
+       for k in range(0,qtd_dep):
+           saida_abmp = saida_abmp + "0"
     
-    #saida_abmp = saida_abmp + "\"\n"
+    saida_abmp = saida_abmp + "\"\n"
 
-    #if i < 10:
-    #    saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.nodeIdSlot = \"00"+"0"+str(i)
-    #else:
-     #   saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.nodeIdSlot = \"00"+str(i)
+    if i < 10:
+        saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.nodeIdSlot = \"00"+"0"+str(i)
+    else:
+       saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.nodeIdSlot = \"00"+str(i)
     
 
-    #for n in range(0,number_endnodes):
-    #    if (1+number_ch+(i-1)*number_endnodes + n) < 10:
-    #        idslot = "0"+str(1+number_ch+(i-1)*number_endnodes + n)
-    #    else:
-    #        idslot = str(1+number_ch+(i-1)*number_endnodes + n)
-    #    saida_abmp = saida_abmp + idslot
+    for n in range(0,number_endnodes):
+        if (1+number_ch+(i-1)*number_endnodes + n) < 10:
+            idslot = "0"+str(1+number_ch+(i-1)*number_endnodes + n)
+        else:
+            idslot = str(1+number_ch+(i-1)*number_endnodes + n)
+        saida_abmp = saida_abmp + idslot
     
     qtd_ant = i-1
     qtd_dep = number_ch-i
 
-    #for n in range (0,number_txch):
-    #    for k in range(0,qtd_ant):
-    #        saida_abmp = saida_abmp + "00"
-    #    if i < 10:
-    #        saida_abmp = saida_abmp + "0"+str(i)
-    #    else:
-    #        saida_abmp = saida_abmp + str(i)
-    #    for k in range(0,qtd_dep):
-    #        saida_abmp = saida_abmp + "00"
+    for n in range (0,number_txch):
+        for k in range(0,qtd_ant):
+            saida_abmp = saida_abmp + "00"
+        if i < 10:
+            saida_abmp = saida_abmp + "0"+str(i)
+        else:
+            saida_abmp = saida_abmp + str(i)
+        for k in range(0,qtd_dep):
+            saida_abmp = saida_abmp + "00"
         
-    #saida_abmp = saida_abmp + "\"\n"
+    saida_abmp = saida_abmp + "\"\n"
        
     saida_abmp = saida_abmp + "SN.node["+str(i)+"].Communication.MAC.channels = \"";
   
@@ -165,7 +165,7 @@ for i in range(1,number_ch+1):
     
     saida_abmp = saida_abmp + "\"\n"
 
-    #saida_abmp = saida_abmp + "SN.node["+str(i)+"].Application.packet_rate = 0\n"
+    saida_abmp = saida_abmp + "SN.node["+str(i)+"].Application.packet_rate = 0\n"
 
 saida_abmp = saida_abmp + "************************************************************\n"
 
@@ -183,32 +183,32 @@ for i in range(1,number_ch+1):
         end_nodes_positions_y.append(yCoor)
 
     
-        #dist = m.sqrt(m.pow(xCoor-x_base,2)+m.pow(yCoor-y_base,2))
-        #distancias = distancias + "# "+str(dist)+"\n"
+        dist = m.sqrt(m.pow(xCoor-x_base,2)+m.pow(yCoor-y_base,2))
+        distancias = distancias + "# "+str(dist)+"\n"
 
-        #saida_positions = saida_positions + "SN.node["+str(j+k)+"].xCoor = "+str(xCoor)+"\n"
-        #saida_positions = saida_positions + "SN.node["+str(j+k)+"].yCoor = "+str(yCoor)+"\n"
-        #saida_positions = saida_positions + "SN.node["+str(j+k)+"].zCoor = 2"
-        #if not(i == number_ch and k == (number_endnodes-1)):
-         #   saida_positions = saida_positions+"\n"
-        #saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Communication.MAC.clusterID = "+str(i)+"\n"
-        #saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Communication.MAC.macBufferSize = "+str(buffersize_endnode)+"\n"
+        saida_positions = saida_positions + "SN.node["+str(j+k)+"].xCoor = "+str(xCoor)+"\n"
+        saida_positions = saida_positions + "SN.node["+str(j+k)+"].yCoor = "+str(yCoor)+"\n"
+        saida_positions = saida_positions + "SN.node["+str(j+k)+"].zCoor = 2"
+        if not(i == number_ch and k == (number_endnodes-1)):
+           saida_positions = saida_positions+"\n"
+        saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Communication.MAC.clusterID = "+str(i)+"\n"
+        saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Communication.MAC.macBufferSize = "+str(buffersize_endnode)+"\n"
     
-        #saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Communication.MAC.allocatedSlots = \"0"
+        saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Communication.MAC.allocatedSlots = \"0"
     
         qtd_ant = k
         qtd_dep = number_endnodes-1-qtd_ant
 
-        #for n in range (0,numbertx_end):
-        #  for p in range(0,qtd_ant):
-        #      saida_abmp = saida_abmp + "0"
-        #  saida_abmp = saida_abmp + "1"
-        #  for p in range(0,qtd_dep):
-        #      saida_abmp = saida_abmp + "0"
+        for n in range (0,numbertx_end):
+          for p in range(0,qtd_ant):
+              saida_abmp = saida_abmp + "0"
+          saida_abmp = saida_abmp + "1"
+          for p in range(0,qtd_dep):
+              saida_abmp = saida_abmp + "0"
         
-        #saida_abmp = saida_abmp + "\"\n"
+        saida_abmp = saida_abmp + "\"\n"
     
-        #saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Application.packet_rate = "+str(packet_rate)+"\n"
+        saida_abmp = saida_abmp + "SN.node["+str(j+k)+"].Application.packet_rate = "+str(packet_rate)+"\n"
     
     j = j + number_endnodes
 

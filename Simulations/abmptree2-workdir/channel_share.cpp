@@ -1,3 +1,5 @@
+/* versao em C++ do algoritmo de alocação de canais */
+
 /*
  * @author: Marcello Maruqes de Oliveira
  * using adjacency Matrix to store the graph
