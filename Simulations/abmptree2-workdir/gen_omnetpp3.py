@@ -115,7 +115,7 @@ else:
 	exit()
 
 #ler os nos
-numNodes = 53
+numNodes = 27
 cont = 0
 npx = [0 for i in range(0, numNodes)]
 npy = [0 for i in range(0, numNodes)]
@@ -130,7 +130,7 @@ while cont < numNodes:
 
 ####### SETANDO VALORES DE SIMULACAO MANUALMENTE #######
 NUM_OF_CHANNELS = 16
-number_ch = 4
+number_ch = 2
 ple = 1.69 #expoente de perda
 pld0 = 80.48 #perda na distancia de referencia
 d0 = 15 #distancia de referencia
@@ -215,7 +215,7 @@ for i in range(0, numSensors):
     if len(intf) == 0:
         nearest = -1
         mindist = 100000
-        for k in range (0, 4):
+        for k in range (0, number_ch):
             if dist(npx[i+number_ch+1], npy[i+number_ch+1], npx[k+1], npy[k+1]) < mindist:
                 nearest = k
                 mindist = dist(npx[i+number_ch+1], npy[i+number_ch+1], npx[k+1], npy[k+1])
@@ -226,7 +226,7 @@ for i in range(0, numSensors):
         routers[intf[0]] += 1
 
 
-print "Quantidade de nos exclusivos para roteadores: ", routers[0], routers[1], routers[2], routers[3]
+print "Quantidade de nos exclusivos para roteadores: ", routers[0], routers[1]#, routers[2], routers[3]
 
 #atribuir ao roteador que possui menos sensors nodes
 for i in range(1, 2**number_ch): #para cada area
@@ -255,7 +255,7 @@ for i in range (0, number_ch):
 G = [[0 for i in range(0, number_ch)] for j in range(0, number_ch)]
 
 for i in range(0, numSensors):
-    for j in range(0, 4):
+    for j in range(0, number_ch):
         if clusterID[i] == j:
             continue     #+50% do tempo
         if interf(ple, d0, pld0, 0*sigma, pTRS[i], sen_tr, 
@@ -353,4 +353,4 @@ for i in range(0, numNodes - number_ch - 1):
 FILE = open("omnetpp5.ini", "w")
 
 FILE.write(txt[0:-389] + abmptree3 + txt[-392:])
-print "omnetpp3.ini gerado com sucesso"
+print "omnetpp5.ini gerado com sucesso"

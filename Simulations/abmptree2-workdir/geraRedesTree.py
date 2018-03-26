@@ -21,7 +21,7 @@ packet_rate = 1
 max_ch = 30
 max_end = 40
 
-number_ch = 4
+number_ch = 2
 number_endnodes = 12
 
 buffersize_ch = int(number_endnodes*1.5)
