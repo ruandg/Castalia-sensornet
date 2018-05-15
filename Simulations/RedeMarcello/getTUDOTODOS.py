@@ -217,7 +217,9 @@ try:
               tx_cons[node_id-(1+number_ch)] = tx_cons[node_id-(1+number_ch)] + 1
             #  print linha2
 
-            id_ch = int((node_id-(1+number_ch))/(number_nodes/number_ch))+1
+            #id_ch = int((node_id-(1+number_ch))/(number_nodes/number_ch))+1
+            CH = [0, 0, 0, 0, 0, 2, 4, 1, 2, 3, 4, 3, 4, 1, 2, 3, 4, 1, 2, 3, 4, 1, 2, 1, 3, 4, 1, 2, 3, 4, 3, 1, 2, 1, 3, 4, 1, 4, 3, 2, 3, 2, 4, 2, 1, 2, 3, 4, 1, 2, 1, 3, 4]
+            id_ch = CH[node_id]
             if(linha[1] == "SN.node["+str(id_ch)+"].Communication.MAC" and linha[2] == "Received" and linha[3] == "packet" and linha[9] == str(node_id)):
               #if linha[7] != last_id_mac[node_id-1]:
               rx_cont_mac[node_id-1] = rx_cont_mac[node_id-1]+1.0
