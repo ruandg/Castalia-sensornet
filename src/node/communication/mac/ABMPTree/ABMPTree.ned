@@ -27,6 +27,8 @@ simple ABMPTree like node.communication.mac.iMac {
 	double prrThreshold = default(0.5);
 	double beaconThreshold = default(0.5);
 	double slotSize = default(10.0);
+	double beaconSlotSize = default(15.0);
+    int networkLevels = default(1);
 	int clusterID = default(0);
 	int qtdNodesCluster = default(1);
 	int slotFrameSize = default(1);

@@ -8,7 +8,10 @@
 #define _TOS_ENVIRONMENT_H_
 #include "CastaliaModule.h"
 
-typedef uint8_t error_t;
+#ifdef __APPLE__
+    typedef uint8_t error_t;
+#endif
+
 typedef uint16_t am_addr_t ;
 
 enum{

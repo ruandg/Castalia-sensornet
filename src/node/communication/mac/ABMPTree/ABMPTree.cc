@@ -71,6 +71,8 @@ void ABMPTree::startup() {
 	this->isCoordinator = par("isCoordinator");
 	
 	this->slotSize = par("slotSize"); //in ms
+    this->beaconSlotSize = par("beaconSlotSize");
+    this->networkLevels = par("networkLevels");
 	
 	//AMBPTree
 	this->QTDNODES = par("qtdNodesCluster");
@@ -82,7 +84,10 @@ void ABMPTree::startup() {
 		setTimer(WC_UP, 600000);
 	}
 	else{
-		setTimer(BEACON_TIMEOUT_RESTART, ((slotframesize*100*slotSize)/0.1));	
+        //MUDANCA TAMANHO SLOTSIZE AQUI
+		setTimer(BEACON_TIMEOUT_RESTART, ((100*(slotSize*(slotframesize-networkLevels)+networkLevels*beaconSlotSize))/0.1));	
+        
+		//setTimer(BEACON_TIMEOUT_RESTART, ((slotframesize*100*slotSize)/0.1));	
 		this->cluster_id = par("clusterID");
 	}
 	if(isCoordinator || isClusterHead) {
@@ -258,9 +263,15 @@ void ABMPTree::fromRadioLayer(cPacket * pkt, double rssi, double lqi)
 			SF_offset = macPkt->getSequenceNumber();
 	   
 			//setTimer(BEGIN_CFP, (((8*slotSize)-0.212)/0.1)); //in this implementation the capReduction is enabled, and the nodes go directly to the CFP.
-			setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1.212)/0.1));
+			//setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1.212)/0.1));
 			
-			setTimer(BEACON_TIMEOUT, (((slotframesize+1)*slotSize)/0.1));
+            //MUDANCA DE TAMANHO DE SLOT AQUI
+			setTimer(UPDATE_CHANNEL_CFP, ((beaconSlotSize-1.212)/0.1));
+			//setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1.212)/0.1));
+            
+			//setTimer(BEACON_TIMEOUT, (((slotframesize+1)*slotSize)/0.1));
+			setTimer(BEACON_TIMEOUT, (((slotframesize+1-networkLevels)*slotSize+networkLevels*beaconSlotSize)/0.1));
+            
 		
 			beacon_id = macPkt->getBeaconId();
 		
@@ -331,9 +342,14 @@ void ABMPTree::fromRadioLayer(cPacket * pkt, double rssi, double lqi)
 			SF_offset = macPkt->getSequenceNumber();
 	   
 			//setTimer(BEGIN_CFP, (((8*slotSize)-0.212)/0.1)); //in this implementation the capReduction is enabled, and the nodes go directly to the CFP.
-			setTimer(UPDATE_CHANNEL_CFP, ((slotSize-0.212)/0.1));
 		
-			setTimer(BEACON_TIMEOUT, (((slotframesize+1)*slotSize)/0.1));
+            //MUDANCA TAMANHO SLOTSIZE AQUI
+			setTimer(UPDATE_CHANNEL_CFP, ((beaconSlotSize-0.212)/0.1));
+			//setTimer(UPDATE_CHANNEL_CFP, ((slotSize-0.212)/0.1));
+            
+			//setTimer(BEACON_TIMEOUT, (((slotframesize+1)*slotSize)/0.1));
+			setTimer(BEACON_TIMEOUT, (((slotframesize+1-networkLevels)*slotSize+networkLevels*beaconSlotSize)/0.1));
+            
 		
 			beacon_id = macPkt->getBeaconId();
 		
@@ -568,7 +584,11 @@ void ABMPTree::timerFiredCallback(int index)
 			radioCmd->setParameter(new_channel);
 	 		send(radioCmd, "toRadioModule");	
 			trace() << "Restart state, waiting on channel " << first_ch;
-			setTimer(BEACON_TIMEOUT_RESTART, ((slotframesize*10*slotSize)/0.1));	
+            
+            //MUDANCA SLOTSIZE AQUI
+			setTimer(BEACON_TIMEOUT_RESTART, ((10*(slotSize*(slotframesize-networkLevels)+networkLevels*beaconSlotSize))/0.1));	
+            
+			//setTimer(BEACON_TIMEOUT_RESTART, ((slotframesize*10*slotSize)/0.1));	
 			break;
 		}
 		case BEACON_TIMEOUT: { //only in the mode with channel hopping for the beacons
@@ -592,7 +612,11 @@ void ABMPTree::timerFiredCallback(int index)
 				channel[cluster_id] = first_ch; //TODO: customize beacon ID -> here is set to 0
 				radioCmd->setParameter(new_channel);
 		 		send(radioCmd, "toRadioModule");	
-				setTimer(BEACON_TIMEOUT_RESTART, ((slotframesize*10*slotSize)/0.1));	
+                
+                //MUDANCA SLOTSIZE AQUI
+				setTimer(BEACON_TIMEOUT_RESTART, ((10*(slotSize*(slotframesize-networkLevels)+networkLevels*beaconSlotSize))/0.1));	
+                
+				//setTimer(BEACON_TIMEOUT_RESTART, ((slotframesize*10*slotSize)/0.1));	
 				trace() << "Restart state, waiting on channel " << first_ch;
 				break;
 			}
@@ -620,7 +644,11 @@ void ABMPTree::timerFiredCallback(int index)
 				radioCmd->setParameter(new_channel);
 	 		
 				send(radioCmd, "toRadioModule");			
-				setTimer(BEACON_TIMEOUT, (((slotframesize)*slotSize)/0.1));	
+                
+                //MUDANCA SLOTSIZE AQUI
+				setTimer(BEACON_TIMEOUT, (((slotframesize-networkLevels)*slotSize+networkLevels*beaconSlotSize)/0.1));	
+                
+				//setTimer(BEACON_TIMEOUT, (((slotframesize)*slotSize)/0.1));	
 			}
 			else{
 				RadioControlCommand *radioCmd = new RadioControlCommand();
@@ -645,7 +673,11 @@ void ABMPTree::timerFiredCallback(int index)
 				radioCmd->setParameter(new_channel);
 	 		
 				send(radioCmd, "toRadioModule");			
-				setTimer(BEACON_TIMEOUT, (((slotframesize)*slotSize)/0.1));
+                
+                //MUDANCA SLOTSIZE AQUI
+				setTimer(BEACON_TIMEOUT, (((slotframesize-networkLevels)*slotSize+networkLevels*beaconSlotSize)/0.1));
+                
+			    //setTimer(BEACON_TIMEOUT, (((slotframesize)*slotSize)/0.1));
 			}
 			
 			break;
@@ -951,9 +983,14 @@ void ABMPTree::timerFiredCallback(int index)
 			toRadioLayer(createRadioCommand(SET_STATE, TX));
 			beacon_id++;
 			
-			setTimer(SEND_BEACON, ((slotframesize*slotSize)/0.1));
+            //MUDANCA SLOTSIZE AQUI
+			setTimer(SEND_BEACON, (((slotframesize-networkLevels)*slotSize+networkLevels*beaconSlotSize)/0.1));
 			
-			setTimer(UPDATE_CHANNEL_CFP, (slotSize/0.1)); //goes to time slot 1
+			setTimer(UPDATE_CHANNEL_CFP, (beaconSlotSize/0.1)); //goes to time slot 1
+            
+		//	setTimer(SEND_BEACON, ((slotframesize*slotSize)/0.1));
+			
+			//setTimer(UPDATE_CHANNEL_CFP, (slotSize/0.1)); //goes to time slot 1
 			
 			cfp_cont = 0;
 			//TODO: alocacao dinamica
@@ -974,7 +1011,8 @@ void ABMPTree::timerFiredCallback(int index)
 					double new_channel = 2405.0 + channel[SELF_MAC_ADDRESS]*5;
 					radioCmd->setParameter(new_channel);
 			 		send(radioCmd, "toRadioModule");
-					//trace() << "Indo para o canal " << channel[SELF_MAC_ADDRESS] << " tx do no " << SELF_MAC_ADDRESS << "slot " << cfp_cont;
+					
+                  //  trace() << "Indo para o canal " << channel[SELF_MAC_ADDRESS] << " tx do no " << SELF_MAC_ADDRESS << "slot " << cfp_cont;
 				}
 			}
 			else if(isClusterHead && cfp_cont == 1) {
@@ -1288,18 +1326,37 @@ void ABMPTree::timerFiredCallback(int index)
 					toRadioLayer(createRadioCommand(SET_STATE, TX));
 				}
 			}
-			if(treeTopology && !(isCoordinator || isClusterHead) && cfp_cont < (slotframesize-2)) { //31 -> two superframes (extract the 8 from the CAP)
-				//trace() << "Indo para o update channel, final do slot - end node " << cfp_cont;
-				setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1)/0.1));
-			}
-			else if(cfp_cont < (slotframesize-1)) { //31 -> two superframes (extract the 8 from the CAP)
-				//trace() << "Indo para o update channel, final do slot " << cfp_cont;
-				setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1)/0.1));
-			}
-			else if(!isCoordinator) {
-				//trace() << "Indo para o endfrae, final do slot " << cfp_cont;
-				setTimer(END_FRAME, ((slotSize-2)/0.1));
-			}
+           
+            
+            if(treeTopology) {
+                if((isCoordinator || isClusterHead) && cfp_cont < networkLevels) {
+    				//trace() << "Indo para o update channel, final do slot - beacons intermediarios " << cfp_cont;
+    				setTimer(UPDATE_CHANNEL_CFP, ((beaconSlotSize-1)/0.1));
+                }
+    			else if(!(isCoordinator || isClusterHead) && cfp_cont < (slotframesize-networkLevels)) { 
+    				//trace() << "Indo para o update channel, final do slot - end node " << cfp_cont;
+    				setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1)/0.1));
+    			}
+    			else if((isCoordinator || isClusterHead) && cfp_cont < (slotframesize-1)) { //31 -> two superframes (extract the 8 from the CAP)
+    				//trace() << "Indo para o update channel, final do slot " << cfp_cont;
+    				setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1)/0.1));
+    			}
+    			else if(!isCoordinator) {
+    				//trace() << "Indo para o endframe, final do slot " << cfp_cont;
+    				setTimer(END_FRAME, ((slotSize-2)/0.1));
+    			}
+            }
+            else {
+    			if(cfp_cont < (slotframesize-1)) { //31 -> two superframes (extract the 8 from the CAP)
+    				//trace() << "Indo para o update channel, final do slot " << cfp_cont;
+    				setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1)/0.1));
+    			}
+    			else if(!isCoordinator) {
+    				//trace() << "Indo para o endfrae, final do slot " << cfp_cont;
+    				setTimer(END_FRAME, ((slotSize-2)/0.1));
+    			}
+            }
+           
 			/*if((isCoordinator || isClusterHead) && cfp_cont < (slotframesize-1)) { //31 -> two superframes (extract the 8 from the CAP)
 				//trace() << "Indo para o update channel, final do slot " << cfp_cont;
 				setTimer(UPDATE_CHANNEL_CFP, ((slotSize-1)/0.1));
@@ -1401,12 +1458,20 @@ void ABMPTree::timerFiredCallback(int index)
 					setTimer(BEACON_TIMEOUT, ( ((2*slotSize+1) + slotframesize*slotSize)/0.1));	
 				}*/
 				if(treeTopology && !isClusterHead) {
-					setTimer(UPDATE_CHANNEL_CFP, ((2*slotSize+1)/0.1));
-					setTimer(BEACON_TIMEOUT, ( ((2*slotSize+1) + slotframesize*slotSize)/0.1));	
+                    //MUDANCA SLOTSIZE
+					setTimer(UPDATE_CHANNEL_CFP, ((networkLevels*beaconSlotSize+1)/0.1));
+					setTimer(BEACON_TIMEOUT, ( ( (networkLevels*beaconSlotSize+1) + (slotframesize-networkLevels)*slotSize + networkLevels*beaconSlotSize)/0.1));	
+                    
+					//setTimer(UPDATE_CHANNEL_CFP, ((2*slotSize+1)/0.1));
+					//setTimer(BEACON_TIMEOUT, ( ((2*slotSize+1) + slotframesize*slotSize)/0.1));	
 				}
 				else {
-					setTimer(UPDATE_CHANNEL_CFP, ((slotSize+1)/0.1));
-					setTimer(BEACON_TIMEOUT, ( ((slotSize+1) + slotframesize*slotSize)/0.1));	
+                    //MUDANCA SLOTSIZE 
+					setTimer(UPDATE_CHANNEL_CFP, ((beaconSlotSize+1)/0.1));
+					setTimer(BEACON_TIMEOUT, ( ((beaconSlotSize+1) + (slotframesize-networkLevels)*slotSize + networkLevels*beaconSlotSize)/0.1));	
+					
+                    //setTimer(UPDATE_CHANNEL_CFP, ((slotSize+1)/0.1));
+					//setTimer(BEACON_TIMEOUT, ( ((slotSize+1) + slotframesize*slotSize)/0.1));	
 				}
 				
 				//waiting_beacon = false;
@@ -1428,12 +1493,20 @@ void ABMPTree::timerFiredCallback(int index)
 				//trace() << "Skip beacon " << beacon_id;
 				
 				if(treeTopology && !isClusterHead) {
-					setTimer(UPDATE_CHANNEL_CFP, ((2*slotSize+1)/0.1));
-					setTimer(BEACON_TIMEOUT, ( ((2*slotSize+1) + slotframesize*slotSize)/0.1));	
+                    //MUDANCA SLOTSIZE
+					setTimer(UPDATE_CHANNEL_CFP, ((networkLevels*beaconSlotSize+1)/0.1));
+					setTimer(BEACON_TIMEOUT, ( ( (networkLevels*beaconSlotSize+1) + (slotframesize-networkLevels)*slotSize + networkLevels*beaconSlotSize)/0.1));	
+                    
+					//setTimer(UPDATE_CHANNEL_CFP, ((2*slotSize+1)/0.1));
+					//setTimer(BEACON_TIMEOUT, ( ((2*slotSize+1) + slotframesize*slotSize)/0.1));	
 				}
 				else {
-					setTimer(UPDATE_CHANNEL_CFP, ((slotSize+1)/0.1));
-					setTimer(BEACON_TIMEOUT, ( ((slotSize+1) + slotframesize*slotSize)/0.1));	
+                    //MUDANCA SLOTSIZE 
+					setTimer(UPDATE_CHANNEL_CFP, ((beaconSlotSize+1)/0.1));
+					setTimer(BEACON_TIMEOUT, ( ((beaconSlotSize+1) + (slotframesize-networkLevels)*slotSize + networkLevels*beaconSlotSize)/0.1));	
+					
+                    //setTimer(UPDATE_CHANNEL_CFP, ((slotSize+1)/0.1));
+					//setTimer(BEACON_TIMEOUT, ( ((slotSize+1) + slotframesize*slotSize)/0.1));	
 				}
 				
 				/*if(isClusterHead){

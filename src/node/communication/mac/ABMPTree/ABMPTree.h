@@ -57,6 +57,8 @@ class ABMPTree: public VirtualMac
 		
 		bool isCoordinator;
 		double slotSize;
+        double beaconSlotSize;
+        int networkLevels;
 		string allocatedSlots;
 		//TODO: alocação dinamica para slots e idSlots e ack_bitmap
 		bool slots[100];
