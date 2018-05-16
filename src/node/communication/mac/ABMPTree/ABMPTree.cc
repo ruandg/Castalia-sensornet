@@ -198,7 +198,7 @@ void ABMPTree::startup() {
 	send(radioCmd, "toRadioModule");	
 	
 	if(!isCoordinator){
-		trace () << "Listening to beacon";
+		trace () << "Listening to beacon << Channel " << (first_ch+cluster_id)%16;
 	}
 		
 } 	

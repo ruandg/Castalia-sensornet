@@ -292,14 +292,14 @@ void WirelessChannel::initialize(int stage)
 
 			//trace() << "Avaliando potencia menos " << maxTxPower - PLd - bidirectionalPathLossJitter;
 			
-			if (maxTxPower - PLd - bidirectionalPathLossJitter >= (signalDeliveryThreshold-15)) {
+			if (maxTxPower - PLd - bidirectionalPathLossJitter >= (signalDeliveryThreshold-30)) {
 				pathLoss[i].push_front(new PathLossElement(j,PLd + bidirectionalPathLossJitter));
 				totalElements++;	//keep track of pathLoss size for reporting purposes
 					//trace() << "Ruan - abaixo" << " totalElements: " << totalElements;
 			}
 		//	trace() << "Avaliando potencia mais " << maxTxPower - PLd + bidirectionalPathLossJitter;
 
-			if (maxTxPower - PLd + bidirectionalPathLossJitter >= (signalDeliveryThreshold-15)) {
+			if (maxTxPower - PLd + bidirectionalPathLossJitter >= (signalDeliveryThreshold-30)) {
 				pathLoss[j].push_front(new PathLossElement(i,PLd - bidirectionalPathLossJitter));
 				totalElements++;	//keep track of pathLoss size for reporting purposes
 				//trace() << "Ruan - mais abaixo " << "totalElements: " << totalElements;
