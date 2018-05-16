@@ -1,0 +1,51 @@
+posicao.py:
+
+altera posicionamento dos routers/sink a partir do arquivo topologia.txt
+python posicao.py < topologia.txt
+substitui com ctrl-v
+
+
+*********************************************
+potencia.py:
+
+a partir do arquivo de topologia.txt
+calcula a potência baseada na seguinte estratégia:
+    menor potência de transmissão que garante comunicação com 2/sigma 
+    essa potência é acrescida de 5%
+python potencia.py < topologia.txt
+
+
+*********************************************
+formarRede.py: 
+
+atribui que nó pertence a que clusterHead
+
+Entrada: potência, posicionamento (topologiaEpotencia.txt)
+
+Algoritmo:
+verifica com que roteadores o nó final interfere com 0*sigma
+se interefere com nenhum coloca no mais próximo
+se interefere com 1 coloca nele
+
+se interefe com > 1: 
+    para cada intereferencia possível:
+        para cada roteador na intereferencia:
+            salve PAR(quantidade nós roteado, roteador)
+        para cada sensor que se encontra acessando SOMENTE os roteadores em intereferencia:
+            pego o roteador com menor quantidade de nós roteados (fila de prioridade) e associo a ele
+
+DEVE SER ALTERADO:
+SN.node[1].Communication.MAC.nodeIdSlot = "0001*050607080910111213141516*010000000100000001000000010000000100000001000000010000000100000001000000"
+SN.node[7].Communication.MAC.clusterID = 1
+SN.node[7].Communication.MAC.allocatedSlots = "0001000000000"
+O arquivo de getTudoTodos também deve ser modificado
+
+*********************************************
+alocaCanal.py: (depende do posicionamento e da potência)
+
+a partir do posicionamento, da potência dos nós e do clusterHead aloca os canais de forma 
+
+Entrada: potência, posicionamento, clusterHead de cada nó (topologiaEpotenciaEclusterHead)
+
+DEVE SER ALTERADO:
+    SN.node[1].Communication.MAC.channels = "1000100010001000"
