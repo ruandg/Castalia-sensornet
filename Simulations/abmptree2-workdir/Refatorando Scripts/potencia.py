@@ -1,3 +1,6 @@
+#MUDANCA: RECEBE POSICIONAMENTO E CLUSTER-ID, CALCULA A MENOR POTENCIA NECESSARIA
+#PARA GARANTIR QUASE 95% DE COMUNICACAO (-2sigma)
+#UTILIZANDO A 68 95 99.7 RULE
 import smallestEnclosingCircle as sec
 import math
 
@@ -12,22 +15,22 @@ def ptransmissao(ple, d0, pld0, sigma, sen_tr, d): #perda no percurso + limiar
 #choosing ptrs by potency level
 def choosePTRs(n):
     n = float(n)
-    ptrsLEVELS = [15, 10, 5, 0, -1, -3, -5, -7, -10, -15, -25]
-    for i in range(0, 11):
+    ptrsLEVELS = [0, -1, -3, -5, -7, -10, -15, -25]
+    for i in range(0, 8):
         if n > ptrsLEVELS[i]:
+            if i == 0: 
+                return 0
             return ptrsLEVELS[i-1]
+    return -25
 
 #setando constantes manualmente
-numNodes = 27
+numNodes = 53
 numRouters = 4
-inters_p = 0.80 # intersect percentage (util para todos intereseccionarem com sink node) comunicacao com o sink node garantida
 ple = 1.69 #expoente de perda
 pld0 = 80.48 #perda na distancia de referencia
 d0 = 15 #distancia de referencia
 sigma = 6.62 #desvio padrao em dB a ser aplicado
-pt = 0 #potencia de transmissao
 sen_tr = -94 #sensibilidade do transceptor
-sin45 = math.sqrt(2)/2 # posicionar os nos na arquitetura de quadrado
 
 #zerando os valores de posicionamento
 npx = [0 for i in range(0, numNodes)]
@@ -56,16 +59,26 @@ while True:
             break
     cont = cont + 1
 
-#alterando a potencia para cada no final
-acres = 0
-for i in range(5, numNodes): #pegando o min(menor + 5%menor, 0) com 2*sigma (garante comunicacao confiavel)
-    for j in range(1, 5):
-        ptrans = ptransmissao(ple, d0, pld0, 2*sigma, sen_tr, dist(npx[i], npy[i], npx[j], npy[j]))
-        if ptrans < 0: acres = 0.95;
-        else: acres = 1.05;
-        pTRS[i] = choosePTRs(min(pTRS[i], acres*ptrans))
+cont = 0
+while True:
+    inp = raw_input()
+    if inp.strip() == "*":
+        break
+    for i in range(0, len(inp)):
+        if inp[i] == '=':
+            pTRS[cont] = float(inp[i+3:-4])
+            break
+    cont = cont + 1
+pTRS = [0 for i in range(0, numNodes)]
 
-for i in range(0, numNodes):
+clusterID = map(int, raw_input().split(' '))
+clusterID = map(lambda x: x-1, clusterID)
+#alterando a potencia para cada no final
+for i in range(5, numNodes):
+    ptrans = ptransmissao(ple, d0, pld0, 2*sigma, sen_tr, dist(npx[i], npy[i], npx[clusterID[i]+1], npy[clusterID[i]+1]))
+    pTRS[i] = choosePTRs(min(pTRS[i], ptrans))
+
+for i in range(5, numNodes):
     print "SN.node["+str(i)+"].Communication.Radio.TxOutputPower = \""+str(pTRS[i])+"dBm\""
 
 

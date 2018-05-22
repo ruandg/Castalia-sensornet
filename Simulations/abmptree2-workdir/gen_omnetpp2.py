@@ -160,15 +160,15 @@ for i in range(0, number_ch):
     for j in range(0, NUM_OF_CHANNELS):
         if channels[i][j] == True:
             channelsCheckCount += 1
-    #print "Cluster head " + str(i) + "(" + str(channelsCheckCount) + ")"
-    #print "channels -> ",
+    print "Cluster head " + str(i) + "(" + str(channelsCheckCount) + ")"
+    print "channels -> ",
     for j in range(0, NUM_OF_CHANNELS):
         if channels[i][j] == True:
-            #print str(j),
+            print str(j),
             MAC_CHANNELLS[i] += "1"
         else:
             MAC_CHANNELLS[i] += "0"
-    #print MAC_CHANNELLS[i]
+    print MAC_CHANNELLS[i]
 
 #end algorithm
 
@@ -186,7 +186,7 @@ for i in range(0, number_ch):
 
 #gen omnetpp2.ini
 
-FILE = open("omnetpp2.ini", "w")
+#FILE = open("omnetpp2.ini", "w")
 #print txt[0:-388] + abmptree2 + txt[-392:-3]
-FILE.write(txt[0:-388] + abmptree2 + txt[-392:])
-print "omnetpp2.ini gerado com sucesso"
+#FILE.write(txt[0:-388] + abmptree2 + txt[-392:])
+#print "omnetpp2.ini gerado com sucesso"

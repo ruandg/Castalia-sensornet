@@ -8,8 +8,16 @@ def interf(ple, d0, pld0, sigma, pt, sen_tr, d):
 def dist(x1, y1, x2, y2):
     return math.sqrt((x1-x2)**2 + (y1-y2)**2)
 
+#2*sigma interfere com 98% de probabilidade
+#0*sigma interfere com 50% de probablidade
+def interf2(ple, d0, pld0, sigma, pt, sen_tr, x1, y1, x2, y2):
+    return node_reach(ple, d0, pld0, sigma, pt, sen_tr) >= dist(x1, y1,x2, y2)
+
+def node_reach(ple, d0, pld0, sigma, pt, sen_tr):
+    return 10**( (sen_tr - pt + sigma + pld0)/(-10*ple) + math.log10(d0) )
+
 #constantes necessarias
-numNodes = 27
+numNodes = 53
 cont = 0
 npx = [0 for i in range(0, numNodes)]
 npy = [0 for i in range(0, numNodes)]
@@ -56,8 +64,10 @@ while True:
             break
     cont = cont + 1
 
+pTRS = [0 for i in range(0, numNodes)]
+
 clusterID = map(int, raw_input().split(' '))
-print(clusterID)
+clusterID = map(lambda x: x-1, clusterID)
 
 ###### ESCOLHENDO QUAL CANAL PERTENCE A QUAL ROTEADOR #######
 # criando o grafo

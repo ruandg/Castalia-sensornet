@@ -155,7 +155,7 @@ sen_tr = -94 #sensibilidade do transceptor
 sn_pos = smallestEnclosingCircle.make_circle(zip(npx[5:], npy[5:]))
 npx[0] = sn_pos[0]
 npy[0] = sn_pos[1]
-
+console.log(npx[0], npy[0])
 #alterando a potencia manualmente para os sink e router nodes
 pTRS = [0 for i in range(0, numNodes)]
 pTRS[0] = 15 #setando manualmente sink node
@@ -332,7 +332,7 @@ for i in range (0, number_ch):
 
 
 it = txt.find("SN.node[*].Communication.MACProtocolName = \"ABMPTree\"")
-abmptree3 = "[Config abmptree3]\n"
+abmptree3 = "\n[Config abmptree3]\n"
 for i in range(0, numNodes):
     abmptree3 += "SN.node["+str(i)+"].Communication.Radio.TxOutputPower = \""+str(pTRS[i])+"dBm\"\n"
 abmptree3 += txt[it:it+11904]

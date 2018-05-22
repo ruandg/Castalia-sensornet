@@ -6,8 +6,9 @@ def router_reach(ple, d0, pld0, sigma, pt, sen_tr):
     return 10**( (sen_tr - pt + sigma + pld0)/(-10*ple) + math.log10(d0) )
 
 #setando constantes manualmente
-numNodes = 27
+numNodes = 53
 numRouters = 4
+potenciaRoteador = 10
 inters_p = 0.80 # intersect percentage (util para todos intereseccionarem com sink node) comunicacao com o sink node garantida
 ple = 1.69 #expoente de perda
 pld0 = 80.48 #perda na distancia de referencia
@@ -45,7 +46,7 @@ npx[0] = sn_pos[0]
 npy[0] = sn_pos[1]
 
 #calculando o valor do posicionamento para os routers
-radious = router_reach(ple, d0, pld0, 2*sigma, 7.5, sen_tr) 
+radious = router_reach(ple, d0, pld0, 2*sigma, potenciaRoteador, sen_tr) 
 
 npx[1] =  inters_p*radious*sin45 + sn_pos[0]
 npy[1] =  inters_p*radious*sin45 + sn_pos[1]

@@ -1,0 +1,15 @@
+SN.node[0].xCoor = -1.15154473916
+SN.node[0].yCoor = 17.4177740617
+SN.node[0].zCoor = 2
+SN.node[1].xCoor = 23.3402876015
+SN.node[1].yCoor = 41.9096064023
+SN.node[1].zCoor = 2
+SN.node[2].xCoor = -25.6433770798
+SN.node[2].yCoor = 41.9096064023
+SN.node[2].zCoor = 2
+SN.node[3].xCoor = 23.3402876015
+SN.node[3].yCoor = -7.07405827891
+SN.node[3].zCoor = 2
+SN.node[4].xCoor = -25.6433770798
+SN.node[4].yCoor = -7.07405827891
+SN.node[4].zCoor = 2

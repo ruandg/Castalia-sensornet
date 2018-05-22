@@ -1,9 +1,36 @@
+O passo a passo para realizar a simulação é simples porém trabalhoso
+    1. posicao.py
+        1. modificar as constantes necessárias:
+            numNodes 
+            numRouters
+        2. passar o posicionamento
+        3. retorno é o posicionamento do router e do sink
+        4. substituir com ctrl-v
+        (PARA CALCULAR O POSICIONAMENTO É LEVADO EM CONSIDERAÇÃO 0Dbm PARA MANTER OS ROTEADORES PROXIMOS DOS NOS
+        E UMA INTERSECÇÃO DE 20%(1-inters_p) com O SINKNODE PARA GARNATIR A COMUNICAÇÃO 100% do tempo)
+    2. formaRede.py
+        1. modifica as constantes necessárias
+            numNodes 
+            NUM_OF_CHANNELS 
+            numRouters 
+        2. passa o posicionamento
+        3. substitui o clusterId manualmente
+        4. substitui o nodeIdSlot (é dado pelo codigo)
+        5. substitui o allocatedSlots (1 no recebe a 1 posicao (BOA SORTE))
+    3. potencia.py
+        1. modoficar as constantes necessárioas:
+            numNodes 
+            numRouters
+        2. passar o pocionamento e o clusterID (lembrar de modificar se for juntar com o posicao.py)
+        3. substituir com ctrl-v 
+        RETORNA A POTENCIA GARANTINDO 99.7% DA COMUNICAO (-3SIGMA) COM MAXIMO de 0dbm
+
+*********************************************
 posicao.py:
 
 altera posicionamento dos routers/sink a partir do arquivo topologia.txt
 python posicao.py < topologia.txt
 substitui com ctrl-v
-
 
 *********************************************
 potencia.py:

@@ -7,29 +7,6 @@ import smallestEnclosingCircle
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 ###################### UTILITARIOS ######################
-def getValueCoord(txt, it):
-	it = txt.find("=", it) + 2
-	value = ""
-	while txt[it] != '\n':
-		value += txt[it]
-		it += 1
-	return float(value), it
-
-def getClusterID(txt, it):
-	it = txt.find("Communication.MAC.clusterID = ", it) + 30
-	value = ""
-	while txt[it] != '\n':
-		value += txt[it]
-		it += 1
-	return int(value), it
-
-def getPTRS(txt, it):
-	it = txt.find("TxOutputPower = ", it) + 17
-	value = ""
-	while txt[it] != 'd':
-		value += txt[it]
-		it += 1
-	return float(value), it
 
 def dist(x1, y1, x2, y2):
     return math.sqrt((x1-x2)**2 + (y1-y2)**2)
@@ -40,24 +17,7 @@ def interf(ple, d0, pld0, sigma, pt, sen_tr, d):
 def router_reach(ple, d0, pld0, sigma, pt, sen_tr):
     return 10**( (sen_tr - pt + sigma + pld0)/(-10*ple) + math.log10(d0) )
 
-############## LEITURA E INICIALIZACAO ###############
-if len(sys.argv) != 2:
-	exit()
-
-top = sys.argv[1]
-print "Topologia: " + top
-
-FILE = open("omnetpp5.ini", "r")
-txt = FILE.read()
-output = txt
-
-it = txt.find("Config "+top, 4300)
-if it != -1:
-	print "\ttopologia encontrada"
-else:
-	print "\ttopologia nao encontrada"
-	exit()
-
+############## INICIALIZACAO ###############
 numNodes = 53
 cont = 0
 npx = [0 for i in range(0, numNodes)]
@@ -66,26 +26,39 @@ npz = [0 for i in range(0, numNodes)]
 clusterID = [0 for i in range(0, numNodes)]
 pTRS = [0 for i in range(0, numNodes)]
 
-while cont < numNodes:
-	npx[cont], it = getValueCoord(txt, it)
-	npy[cont], it = getValueCoord(txt, it)
-	npz[cont], it = getValueCoord(txt, it)
-	cont += 1
 
-it = txt.find("[Config abmptree3]")
-for i in range(1, numNodes):
-	clusterID[i], it = getClusterID(txt, it)
+############## LEITURA ###############
+cont = 0
+while True:
+    inp = raw_input()
+    if inp.strip() == "*":
+        break
+    for i in range(0, len(inp)):
+        if inp[i] == '=':
+            if cont%3 == 0: #x
+                npx[cont/3] = float(inp[i+2:])
+            elif cont%3 == 1: #y
+                npy[cont/3] = float(inp[i+2:])
+            else: #z
+                npz[cont/3] = float(inp[i+2:])
+            break
+    cont = cont + 1
 
-it = txt.find("[Config abmptree3]")
-for i in range(0, numNodes):
-	pTRS[i], it = getPTRS(txt, it)
+cont = 0
+while True:
+    inp = raw_input()
+    if inp.strip() == "*":
+        break
+    for i in range(0, len(inp)):
+        if inp[i] == '=':
+            pTRS[cont] = float(inp[i+3:-4])
+            break
+    cont = cont + 1
+pTRS = [0 for i in range(0, numNodes)]
 
-'''
-clusterID[5:17] = [1 for i in range(0, 12)]
-clusterID[17:29] = [2 for i in range(0, 12)]
-clusterID[29:41] = [3 for i in range(0, 12)]
-clusterID[41:53] = [4 for i in range(0, 12)]
-'''
+clusterID = map(int, raw_input().split(' '))
+clusterID = map(lambda x: x-1, clusterID)
+
 ####### SETANDO VALORES DE SIMULACAO MANUALMENTE #######
 NUM_OF_CHANNELS = 16
 number_ch = 4
@@ -100,7 +73,7 @@ sen_tr = -94 #sensibilidade do transceptor
 plt.suptitle("Connections and Interferences in IWSN")
 fl1 = fl2 = 0 #flags de legenda
 for i in range(1, 5): 
-	for j in range(5, 53):       #interfere acima de 50%
+	for j in range(5, 53): #interfere acima de 50% (0*sigma)
 		if interf(ple, d0, pld0, 0*sigma, pTRS[j], sen_tr, dist(npx[i], npy[i], npx[j], npy[j])):
 			if  clusterID[j] != i:
 				plt.plot([npx[i], npx[j]], [npy[i], npy[j]], 'r--', c="#000000", alpha = 0.1, label="interference" if fl2 == 0 else ""); fl2 = 1
@@ -136,4 +109,4 @@ plt.grid(linestyle=':', linewidth='0.5', color='black')
 
 #printing
 plt.draw()
-plt.show()
+plt.savefig(sys.argv[1]+'.png')
